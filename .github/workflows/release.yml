@@ -4,11 +4,15 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build on ${{ matrix.os_name }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: windows-latest
@@ -20,10 +24,10 @@ jobs:
             bin_path: build/paping
             out_name: paping-linux-amd64
           - os: macos-latest
-            os_name: macOS (Apple Silicon / M1)
+            os_name: macOS (Apple Silicon)
             bin_path: build/paping
             out_name: paping-macos-arm64
-          - os: macos-13
+          - os: macos-14
             os_name: macOS (Intel)
             bin_path: build/paping
             out_name: paping-macos-amd64
