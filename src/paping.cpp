@@ -50,7 +50,7 @@ inline void closesocket(SOCKET s) { ::close(s); }
 #include <cstring>
 #include <algorithm>
 
-static constexpr std::string_view VERSION = "1.0";
+static constexpr std::string_view VERSION = "1.0.1";
 
 namespace col {
     constexpr std::string_view rst = "\033[0m";
