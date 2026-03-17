@@ -16,11 +16,28 @@ Replaces the unmaintained original [9minds/paping](https://github.com/9minds/pap
 - **Modern Networking**: Support for IPv4, IPv6, and standard TCP handshakes.
 - **Drop-in Replacement**: Uses the exact same `paping` command name. You don't have to break your muscle memory or learn new tools – it simply works the way you expect.
 
-
 ## Installation
 
 ### Pre-built Binaries (Recommended)
-Download the ready-to-use executables for Windows and Linux from the [Releases](https://github.com/arch3rek/Paping-NG/releases) page.
+Download the ready-to-use executables for Windows, Linux, and macOS from the [Releases](https://github.com/arch3rek/Paping-NG/releases) page.
+
+**For Windows users:**
+1. Download `paping-windows-amd64.exe`.
+2. Rename the downloaded file to exactly `paping.exe`.
+3. Drag and drop the file into your `C:\Windows\System32` directory (or `C:\Users\YourUsername`).
+4. You can now open Command Prompt (cmd) or PowerShell and use the `paping` command from anywhere!
+
+**For Linux / macOS users:**
+1. Download the appropriate binary for your system (e.g., `paping-linux-amd64` or `paping-macos-arm64`).
+2. Rename the file to `paping` and make it executable.
+3. Move it to your local bin directory to use it globally.
+
+```bash
+# Example for Linux
+mv paping-linux-amd64 paping
+chmod +x paping
+sudo mv paping /usr/local/bin/
+```
 
 ### Build from source
 If you prefer to compile it yourself, you will need `CMake` and a modern C++ compiler (GCC/Clang/MSVC):

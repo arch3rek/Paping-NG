@@ -1,0 +1,52 @@
+name: Build and Release Binaries
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os_name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            os_name: Windows (x64)
+            bin_path: build/Release/paping.exe
+            out_name: paping-windows-amd64.exe
+          - os: ubuntu-latest
+            os_name: Linux (x64)
+            bin_path: build/paping
+            out_name: paping-linux-amd64
+          - os: macos-latest
+            os_name: macOS (Apple Silicon / M1)
+            bin_path: build/paping
+            out_name: paping-macos-arm64
+          - os: macos-13
+            os_name: macOS (Intel)
+            bin_path: build/paping
+            out_name: paping-macos-amd64
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Configure CMake
+      run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build
+      run: cmake --build build --config Release
+
+    - name: Rename binary (Windows)
+      if: runner.os == 'Windows'
+      run: Rename-Item -Path ${{ matrix.bin_path }} -NewName ${{ matrix.out_name }}
+
+    - name: Rename binary (Linux / macOS)
+      if: runner.os != 'Windows'
+      run: mv ${{ matrix.bin_path }} ${{ matrix.out_name }}
+
+    - name: Upload Binary to Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: ${{ matrix.out_name }}
