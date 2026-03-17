@@ -20,19 +20,15 @@ jobs:
         include:
           - os: windows-latest
             os_name: Windows (x64)
-            bin_path: build/Release/paping.exe
             out_name: paping-windows-amd64.exe
           - os: ubuntu-latest
             os_name: Linux (x64)
-            bin_path: build/paping
             out_name: paping-linux-amd64
           - os: macos-latest
             os_name: macOS (Apple Silicon / M1)
-            bin_path: build/paping
             out_name: paping-macos-arm64
           - os: macos-14
             os_name: macOS (Intel)
-            bin_path: build/paping
             out_name: paping-macos-amd64
 
     steps:
@@ -45,13 +41,15 @@ jobs:
     - name: Build
       run: cmake --build build --config Release
 
-    - name: Rename binary (Windows)
+    - name: Find and Rename binary (Windows)
       if: runner.os == 'Windows'
-      run: Rename-Item -Path ${{ matrix.bin_path }} -NewName ${{ matrix.out_name }}
+      run: |
+        Get-ChildItem -Path build -Filter *.exe -Recurse | Select-Object -First 1 | Rename-Item -NewName ${{ matrix.out_name }}
+        Get-ChildItem -Path build -Filter ${{ matrix.out_name }} -Recurse | Select-Object -First 1 | Move-Item -Destination .
 
     - name: Rename binary (Linux / macOS)
       if: runner.os != 'Windows'
-      run: mv ${{ matrix.bin_path }} ${{ matrix.out_name }}
+      run: mv build/paping ${{ matrix.out_name }}
 
     - name: Upload Binary to Release
       uses: softprops/action-gh-release@v2
